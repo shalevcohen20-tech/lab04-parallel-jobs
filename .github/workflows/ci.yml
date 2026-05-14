@@ -45,12 +45,10 @@ on:
 
                 steps:
                     - name: Who activated the pipeline
-                      run: echo "Pipeline triggered by: ${{ github.actor }}"
+                      run: 'echo "Pipeline triggered by: ${{ github.actor }}"''
 
                     - name: lint results
-                      run: echo "Lint results: ${{ needs.lint.result }}"
+                      run: 'echo "Lint results: ${{ needs.lint.result }}"''
 
                     - name: Test results
-                      run: echo "Test results: ${{ needs.test.result }}"
-
-
+                      run: 'echo "Test results: ${{ needs.test.result }}"''
