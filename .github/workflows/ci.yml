@@ -1,58 +1,56 @@
-name: Parallel Jobs Lab
-
 on:
-  push:
-    branches:
-      - main
+    push:
+        jobs:
+            lint:
+                runs-on: ubuntu-latest
 
-  pull_request:
+                steps:
+                    - name: Checkout code
+                      uses: actions/checkout@v4
 
-jobs:
-  lint:
-    runs-on: ubuntu-latest
+                    - name: Setup Node.js
+                      uses: actions/setup-node@v4
+                      with:
+                        node-version: 20
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+                    - name: Install dependencies
+                      run: npm install
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
+                    - name: Check code quality
+                      run: npm run lint
 
-      - name: Install dependencies
-        run: npm install
 
-      - name: Run lint
-        run: npm run lint
+            test:
+                runs-on: ubuntu-latest
 
-  test:
-    runs-on: ubuntu-latest
+                steps:
+                    - name: Checkout code
+                      uses: actions/checkout@v4
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+                    - name: Setup Node.js
+                      uses: actions/setup-node@v4
+                      with:
+                        node-version: 20
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
+                    - name: Install dependencies
+                      run: npm install
 
-      - name: Install dependencies
-        run: npm install
+                    - name: run tests
+                      run: npm test
 
-      - name: Run tests
-        run: npm test
 
-  summary:
-    runs-on: ubuntu-latest
-    needs: [lint, test]
+            summary:
+                runs-on: ubuntu-latest
+                needs: [lint, test]
 
-    steps:
-      - name: Print actor
-        run: echo "Pipeline triggered by ${{ github.actor }}"
+                steps:
+                    - name: Who activated the pipeline
+                      run: echo "Pipeline triggered by: ${{ github.actor }}"
 
-      - name: Print results
-        run: |
-          echo "Lint result: ${{ needs.lint.result }}"
-          echo "Test result: ${{ needs.test.result }}"
+                    - name: lint results
+                      run: echo "Lint results: ${{ needs.lint.result }}"
+
+                    - name: Test results
+                      run: echo "Test results: ${{ needs.test.result }}"
+
+
